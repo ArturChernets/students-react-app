@@ -1,0 +1,133 @@
+.studentsPage {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 25px;   /* Changed from -200px to a positive margin */
+    margin-left: 350px;
+    width: 900px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.header h2 {
+    margin: 0;
+}
+
+.headerButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.addButton,
+.trashButton {
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+
+.statusGreen {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+}
+
+.statusGray {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: gray;
+    border-radius: 50%;
+}
+
+.icon {
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    padding: 10px 10px;
+    border: #1a1a1a 1px solid;
+    border-radius: 8px;
+}
+
+.pageButton {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0 5px;
+}
+
+.pageButton:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.activePage {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+
+@media (max-width: 1439px) {
+    .studentsPage {
+        margin-left: 370px;
+        width: 700px;
+    }
+}
+
+@media (max-width: 1235px) {
+    .studentsPage {
+        margin-left: 340px;
+        width: calc(100% - 340px);
+    }
+}
+
+@media (max-width: 1023px) {
+    .studentsPage {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+    }
+}
+
+@media (max-width: 900px) {
+    .studentsPage {
+        margin-top: 5px;
+        margin-left: 0;
+        width: 145%;
+    }
+}
