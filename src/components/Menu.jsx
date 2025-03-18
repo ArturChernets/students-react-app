@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom"; // Використовуємо NavLink
+import { NavLink } from "react-router-dom";
 import styles from "../styles/Menu.module.css";
 
 function Menu() {

@@ -13,7 +13,6 @@ function AddStudentForm({ closeModal, handleCreate }) {
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        // Clear error for the field when user types
         setErrors({ ...errors, [e.target.name]: "" });
     };
 

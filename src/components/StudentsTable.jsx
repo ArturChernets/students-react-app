@@ -73,7 +73,6 @@ function StudentsTable() {
         setSelectedStudentIds([]);
     };
 
-    // Функція для вибору лише студентів на поточній сторінці
     const handleSelectAll = (e) => {
         if (e.target.checked) {
             const currentPageIds = currentStudents.map((student) => student.id);
@@ -99,8 +98,8 @@ function StudentsTable() {
             <div className={styles.header}>
                 <h2>Students</h2>
                 <div className={styles.headerButtons}>
-                    <button className={styles.addButton} onClick={openModal}><FaPlus /></button>
-                    <button className={styles.trashButton} onClick={openBulkDeleteModal}><FaTrash /></button>
+                    <button aria-label={"Add student"} className={styles.addButton} onClick={openModal}><FaPlus /></button>
+                    <button aria-label={"Delete select students"} className={styles.trashButton} onClick={openBulkDeleteModal}><FaTrash /></button>
                 </div>
             </div>
 
@@ -115,9 +114,11 @@ function StudentsTable() {
                     <th>
                         <input
                             type="checkbox"
+                            aria-label={"Main checkbox"}
                             onChange={handleSelectAll}
                             checked={currentStudents.length > 0 && selectedStudentIds.length === currentStudents.length}
                         />
+                        <span className={styles.srOnly}>Head of table</span>
                     </th>
                     <th>Group</th>
                     <th>Name</th>
@@ -133,6 +134,7 @@ function StudentsTable() {
                         <td>
                             <input
                                 type="checkbox"
+                                aria-label={"Checkbox for specific student"}
                                 onChange={handleSelectRow(student.id)}
                                 checked={selectedStudentIds.includes(student.id)}
                             />

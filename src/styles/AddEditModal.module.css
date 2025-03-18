@@ -15,8 +15,8 @@
     background-color: white;
     padding: 20px;
     width: 400px;
-    max-height: 90vh; /* Limits the height to 90% of the viewport height */
-    overflow-y: auto; /* Adds a scrollbar if content is too tall */
+    max-height: 90vh;
+    overflow-y: auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -55,7 +55,6 @@ input, select {
     box-sizing: border-box;
 }
 
-/* Error message styling */
 .errorText {
     display: block;
     color: red;

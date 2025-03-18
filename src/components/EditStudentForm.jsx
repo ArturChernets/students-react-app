@@ -27,7 +27,6 @@ function EditStudentForm({ closeModal, handleUpdate, studentData }) {
         if (name === "gender") setGender(value);
         if (name === "birthday") setBirthday(value);
 
-        // Clear error for the field when updated
         setErrors(prev => ({ ...prev, [name]: "" }));
     };
 

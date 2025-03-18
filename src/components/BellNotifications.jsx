@@ -9,12 +9,11 @@ function BellNotifications() {
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
-        // Simulating new message arrival after 5 seconds
         const timer = setTimeout(() => {
-            setAnimate(true); // Start bell animation
+            setAnimate(true);
             setTimeout(() => {
-                setHasNewNotification(true); // Show notification icon
-                setAnimate(false); // Stop animation
+                setHasNewNotification(true);
+                setAnimate(false);
                 setNotifications([
                     { id: 1, avatar: "https://randomuser.me/api/portraits/men/1.jpg", username: "JohnDoe", message: "Testing of the new feature is complete." },
                     { id: 2, avatar: "https://randomuser.me/api/portraits/women/1.jpg", username: "JaneSmith", message: "Found a bug in the authentication module." },

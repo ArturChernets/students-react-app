@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/DeleteConfirmationModal.module.css"; // Підключаємо CSS файл
+import styles from "../styles/DeleteConfirmationModal.module.css";
 
 function DeleteConfirmationModal({ student, closeModal, handleDelete }) {
     return (
