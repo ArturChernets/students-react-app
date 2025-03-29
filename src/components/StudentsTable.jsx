@@ -52,13 +52,20 @@ function StudentsTable() {
     };
     const closeBulkDeleteModal = () => setIsBulkDeleteModalOpen(false);
 
+    const generateId = () => {
+        const ids = students.map((student) => student.id);
+        return ids.length ? Math.max(...ids) + 1 : 1;
+    };
+
     const handleCreate = (studentData) => {
-        const newStudent = { id: students.length + 1, ...studentData, status: "active" };
+        const newStudent = { id: generateId(), ...studentData, status: "active" };
+        console.log("New student:", JSON.stringify(newStudent, null, 2));
         setStudents([...students, newStudent]);
         closeModal();
     };
 
     const handleUpdate = (updatedStudent) => {
+        console.log("Updated student:", JSON.stringify(updatedStudent, null, 2));
         setStudents(students.map((student) => (student.id === updatedStudent.id ? updatedStudent : student)));
         closeEditModal();
     };
@@ -120,6 +127,8 @@ function StudentsTable() {
                         />
                         <span className={styles.srOnly}>Head of table</span>
                     </th>
+                    {/* Прихована колонка для id */}
+                    <th className={styles.hidden}>ID</th>
                     <th>Group</th>
                     <th>Name</th>
                     <th>Gender</th>
@@ -139,6 +148,7 @@ function StudentsTable() {
                                 checked={selectedStudentIds.includes(student.id)}
                             />
                         </td>
+                        <td className={styles.hidden}>{student.id}</td>
                         <td><b>{student.group}</b></td>
                         <td><b>{student.firstName} {student.lastName}</b></td>
                         <td>{student.gender}</td>

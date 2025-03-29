@@ -32,7 +32,7 @@ function EditStudentForm({ closeModal, handleUpdate, studentData }) {
 
     const validate = () => {
         const newErrors = {};
-        const nameRegex = /^[A-Za-z]+$/;
+        const nameRegex = /^[A-Za-zА-ЯЁҐЄІЇа-яёґєії]+$/;
 
         if (!group) {
             newErrors.group = "Group is required.";
@@ -40,12 +40,12 @@ function EditStudentForm({ closeModal, handleUpdate, studentData }) {
         if (!firstName) {
             newErrors.firstName = "First name is required.";
         } else if (!nameRegex.test(firstName)) {
-            newErrors.firstName = "First name must contain only letters.";
+            newErrors.firstName = "First name must contain only Ukrainian and English letters.";
         }
         if (!lastName) {
             newErrors.lastName = "Last name is required.";
         } else if (!nameRegex.test(lastName)) {
-            newErrors.lastName = "Last name must contain only letters.";
+            newErrors.lastName = "Last name must contain only Ukrainian and English letters.";
         }
         if (!gender) {
             newErrors.gender = "Gender is required.";
@@ -53,9 +53,13 @@ function EditStudentForm({ closeModal, handleUpdate, studentData }) {
         if (!birthday) {
             newErrors.birthday = "Birthday is required.";
         } else {
+            const birthdayDate = new Date(birthday);
+            const year = birthdayDate.getFullYear();
+            if (year < 2000 || year > 2007) {
+                newErrors.birthday = "Birthday must be between 2000 and 2007.";
+            }
             const today = new Date();
-            const bday = new Date(birthday);
-            if (bday > today) {
+            if (birthdayDate > today) {
                 newErrors.birthday = "Birthday cannot be in the future.";
             }
         }
@@ -89,7 +93,7 @@ function EditStudentForm({ closeModal, handleUpdate, studentData }) {
                     </button>
                 </div>
 
-                <form className={styles.form} onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <div className={styles.formGroup}>
                         <label>Group</label>
                         <select name="group" value={group} onChange={handleInputChange}>

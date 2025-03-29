@@ -18,7 +18,7 @@ function AddStudentForm({ closeModal, handleCreate }) {
 
     const validate = () => {
         const newErrors = {};
-        const nameRegex = /^[A-Za-z]+$/;
+        const nameRegex = /^[A-Za-zА-ЯЁҐЄІЇа-яёґєії]+$/;
 
         if (!formData.group) {
             newErrors.group = "Group is required.";
@@ -26,12 +26,12 @@ function AddStudentForm({ closeModal, handleCreate }) {
         if (!formData.firstName) {
             newErrors.firstName = "First name is required.";
         } else if (!nameRegex.test(formData.firstName)) {
-            newErrors.firstName = "First name must contain only letters.";
+            newErrors.firstName = "First name must contain only Ukrainian and English letters.";
         }
         if (!formData.lastName) {
             newErrors.lastName = "Last name is required.";
         } else if (!nameRegex.test(formData.lastName)) {
-            newErrors.lastName = "Last name must contain only letters.";
+            newErrors.lastName = "Last name must contain only Ukrainian and English letters.";
         }
         if (!formData.gender) {
             newErrors.gender = "Gender is required.";
@@ -39,8 +39,12 @@ function AddStudentForm({ closeModal, handleCreate }) {
         if (!formData.birthday) {
             newErrors.birthday = "Birthday is required.";
         } else {
-            const today = new Date();
             const birthdayDate = new Date(formData.birthday);
+            const year = birthdayDate.getFullYear();
+            if (year < 2000 || year > 2007) {
+                newErrors.birthday = "Birthday must be between 2000 and 2007.";
+            }
+            const today = new Date();
             if (birthdayDate > today) {
                 newErrors.birthday = "Birthday cannot be in the future.";
             }
