@@ -1,10 +1,11 @@
 const CACHE_NAME = 'pwa-cache-v1';
+const BASE_URL = '/students-react-app/'; // Ваш base URL
 const URLS_TO_CACHE = [
-    self.location.href, // Кешуємо поточну сторінку
-    `${self.location.origin}${import.meta.env.BASE_URL}index.html`,
-    `${self.location.origin}${import.meta.env.BASE_URL}assets/*`,
-    `${self.location.origin}${import.meta.env.BASE_URL}icons/icon-192x192.png`,
-    `${self.location.origin}${import.meta.env.BASE_URL}icons/icon-512x512.png`
+    `${BASE_URL}`,
+    `${BASE_URL}index.html`,
+    `${BASE_URL}service-worker.js`, // Тепер він у корені
+    `${BASE_URL}icons/icon-192x192.png`,
+    `${BASE_URL}icons/icon-512x512.png`
 ];
 
 self.addEventListener('install', (event) => {
