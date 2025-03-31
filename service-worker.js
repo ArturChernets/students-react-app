@@ -2,7 +2,9 @@ const CACHE_NAME = 'pwa-cache-v1';
 const URLS_TO_CACHE = [
     '/',
     '/index.html',
-    '/browser-icon.png'
+    '/browser-icon.png',
+    '/students-react-app/web-app-manifest-192x192.png',
+    '/students-react-app/web-app-manifest-512x512.png'
 ];
 
 // Встановлення Service Worker і кешування ресурсів
