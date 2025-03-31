@@ -1,0 +1,96 @@
+.bellContainer {
+    position: relative;
+}
+
+.bellIcon {
+    color: #ffffff;
+    position: relative;
+    font-size: 24px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.unreadDot {
+    position: absolute;
+    top: 2px;
+    right:-2px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+@keyframes shake {
+    0% { transform: rotate(0); }
+    20% { transform: rotate(-10deg); }
+    40% { transform: rotate(10deg); }
+    60% { transform: rotate(-10deg); }
+    80% { transform: rotate(10deg); }
+    100% { transform: rotate(0); }
+}
+
+.shake {
+    animation: shake 1s ease-in-out;
+}
+
+.notificationsList {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 260px;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 10;
+    padding: 12px;
+    transition: all 0.3s ease-in-out;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.notification:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.notificationText {
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-weight: bold;
+    margin-bottom: 3px;
+    color: #333;
+}
+
+.message {
+    color: #555;
+    font-size: 14px;
+}
+
+.noMessages {
+    text-align: center;
+    color: gray;
+    font-size: 14px;
+    padding: 15px;
+    font-weight: bold;
+}

@@ -1,0 +1,27 @@
+# 🔹 Node.js та залежності
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# 🔹 Кеші та логи
+npm-debug.log*
+yarn-error.log
+*.log
+
+# 🔹 Білди (готовий код, який не потрібно пушити)
+build/
+dist/
+.out/
+
+# 🔹 Конфіденційні файли
+.env
+.env.local
+.env.development.local
+.env.production.local
+
+# 🔹 IDE-файли (щоб не пушити особисті налаштування)
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
