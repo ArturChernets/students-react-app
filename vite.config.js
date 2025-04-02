@@ -6,9 +6,11 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['**/*.{js,css,html,png,svg,woff2}'],
       manifest: {
-        name: 'My Progressive Web App',
-        short_name: 'MyApp',
+        name: 'Student Management Application',
+        short_name: 'Students',
         description: 'A Progressive Web App built with Vite',
         start_url: '/',
         display: 'standalone',

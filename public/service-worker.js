@@ -2,9 +2,12 @@ const CACHE_NAME = 'pwa-cache-v1';
 const URLS_TO_CACHE = [
     '/',
     '/index.html',
-    '/browser-icon.png'
+    '/assets/*.js',
+    '/assets/*.css',
+    '/browser-icon.png',
+    '/icon-192x192.png',
+    '/icon-512x512.png'
 ];
-
 // Встановлення Service Worker і кешування ресурсів
 self.addEventListener('install', (event) => {
     console.log('[Service Worker] Installed');
