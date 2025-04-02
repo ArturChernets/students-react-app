@@ -6,8 +6,6 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['**/*.{js,css,html,png,svg,woff2}'],
       manifest: {
         name: 'Student Management Application',
         short_name: 'Students',
