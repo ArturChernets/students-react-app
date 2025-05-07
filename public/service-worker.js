@@ -3,6 +3,7 @@ const URLS_TO_CACHE = [
     '/',
     '/index.html',
     '/browser-icon.png',
+    '/favicon-96x96.png',
     '/icon-192x192.png',
     '/icon-512x512.png'
 ];

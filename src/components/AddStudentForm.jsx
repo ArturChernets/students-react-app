@@ -3,13 +3,14 @@ import styles from "../styles/AddEditModal.module.css";
 
 function AddStudentForm({ closeModal, handleCreate }) {
     const [formData, setFormData] = useState({
-        group: "",
+        groupName: "",
         firstName: "",
         lastName: "",
         gender: "",
         birthday: "",
     });
     const [errors, setErrors] = useState({});
+    const [submitting, setSubmitting] = useState(false);
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,8 +21,8 @@ function AddStudentForm({ closeModal, handleCreate }) {
         const newErrors = {};
         const nameRegex = /^[A-Za-zА-ЯЁҐЄІЇа-яёґєії]+$/;
 
-        if (!formData.group) {
-            newErrors.group = "Group is required.";
+        if (!formData.groupName) {
+            newErrors.groupName = "Group is required.";
         }
         if (!formData.firstName) {
             newErrors.firstName = "First name is required.";
@@ -52,14 +53,29 @@ function AddStudentForm({ closeModal, handleCreate }) {
         return newErrors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
-        handleCreate(formData);
+
+        setSubmitting(true);
+        try {
+            // Ensure birthday is in correct format
+            const formattedData = {
+                ...formData,
+                birthday: new Date(formData.birthday).toISOString().split("T")[0] // Ensure YYYY-MM-DD
+            };
+            console.log("Submitting data:", formattedData); // Debug log
+            await handleCreate(formattedData);
+        } catch (error) {
+            console.error("Form submission error:", error);
+            setErrors({ submit: "Failed to create student. Try again." });
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -76,9 +92,10 @@ function AddStudentForm({ closeModal, handleCreate }) {
                     <div className={styles.formGroup}>
                         <label>Group</label>
                         <select
-                            name="group"
-                            value={formData.group}
+                            name="groupName"
+                            value={formData.groupName}
                             onChange={handleInputChange}
+                            disabled={submitting}
                         >
                             <option value="">Select Group</option>
                             <option value="PZ-21">PZ-21</option>
@@ -88,8 +105,8 @@ function AddStudentForm({ closeModal, handleCreate }) {
                             <option value="PZ-25">PZ-25</option>
                             <option value="PZ-26">PZ-26</option>
                         </select>
-                        {errors.group && (
-                            <span className={styles.errorText}>{errors.group}</span>
+                        {errors.groupName && (
+                            <span className={styles.errorText}>{errors.groupName}</span>
                         )}
                     </div>
 
@@ -101,6 +118,7 @@ function AddStudentForm({ closeModal, handleCreate }) {
                             value={formData.firstName}
                             onChange={handleInputChange}
                             placeholder="First Name"
+                            disabled={submitting}
                         />
                         {errors.firstName && (
                             <span className={styles.errorText}>{errors.firstName}</span>
@@ -115,6 +133,7 @@ function AddStudentForm({ closeModal, handleCreate }) {
                             value={formData.lastName}
                             onChange={handleInputChange}
                             placeholder="Last Name"
+                            disabled={submitting}
                         />
                         {errors.lastName && (
                             <span className={styles.errorText}>{errors.lastName}</span>
@@ -127,6 +146,7 @@ function AddStudentForm({ closeModal, handleCreate }) {
                             name="gender"
                             value={formData.gender}
                             onChange={handleInputChange}
+                            disabled={submitting}
                         >
                             <option value="">Select Gender</option>
                             <option value="Male">Male</option>
@@ -144,22 +164,32 @@ function AddStudentForm({ closeModal, handleCreate }) {
                             name="birthday"
                             value={formData.birthday}
                             onChange={handleInputChange}
+                            disabled={submitting}
                         />
                         {errors.birthday && (
                             <span className={styles.errorText}>{errors.birthday}</span>
                         )}
                     </div>
 
+                    {errors.submit && (
+                        <div className={styles.errorText}>{errors.submit}</div>
+                    )}
+
                     <div className={styles.modalFooter}>
                         <button
                             className={styles.cancelButton}
                             onClick={closeModal}
                             type="button"
+                            disabled={submitting}
                         >
                             Cancel
                         </button>
-                        <button className={styles.createButton} type="submit">
-                            Create
+                        <button
+                            className={styles.createButton}
+                            type="submit"
+                            disabled={submitting}
+                        >
+                            {submitting ? "Creating..." : "Create"}
                         </button>
                     </div>
                 </form>

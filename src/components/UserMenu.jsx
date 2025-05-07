@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../styles/UserMenu.module.css";
 
-const UserMenu = ({ nickname }) => {
+const UserMenu = ({ nickname, onLogout }) => {
     const [showDropdown, setShowDropdown] = useState(false);
 
     return (
@@ -14,12 +14,12 @@ const UserMenu = ({ nickname }) => {
             <span className={styles.nickname}>{nickname}</span>
             {showDropdown && (
                 <div className={styles.userDropdown}>
-                    <Link to="/edit-profile" className={styles.dropdownItem}>
+                    <span className={styles.dropdownItem}>
                         Edit
-                    </Link>
-                    <Link to="/logout" className={styles.dropdownItem}>
+                    </span>
+                    <span onClick={onLogout} className={styles.dropdownItem}>
                         Log Out
-                    </Link>
+                    </span>
                 </div>
             )}
         </div>
