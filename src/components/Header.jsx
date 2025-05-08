@@ -57,9 +57,11 @@ function Header({ onModalOpen }) {
                 </Link>
             </div>
             <div className={styles.rightSection}>
-                <BellNotifications />
                 {user ? (
                     <>
+                        <Link to="/messages">
+                            <BellNotifications />
+                        </Link>
                         <img
                             src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-image-user-vector-179390926.jpg"
                             alt="Avatar"
