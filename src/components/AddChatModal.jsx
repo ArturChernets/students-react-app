@@ -26,10 +26,10 @@ function AddChatModal({ isOpen, onClose, onCreate }) {
         }
     }, [isOpen]);
 
-    const toggleUser = (userName) => {
+    const toggleUser = (userId) => {
         const updated = new Set(selectedUsers);
-        if (updated.has(userName)) updated.delete(userName);
-        else updated.add(userName);
+        if (updated.has(userId)) updated.delete(userId);
+        else updated.add(userId);
         setSelectedUsers(updated);
     };
 
@@ -76,11 +76,11 @@ function AddChatModal({ isOpen, onClose, onCreate }) {
                 <div className={styles.formGroup}>
                     <label>Select Participants</label>
                     {users.map(user => (
-                        <div key={user._id} className={styles.userCheckboxContainer}>
+                        <div key={user.username} className={styles.userCheckboxContainer}>
                             <input
                                 type="checkbox"
                                 id={user._id}
-                                onChange={() => toggleUser(user.username)}
+                                onChange={() => toggleUser(user.id)}
                             />
                             <label htmlFor={user._id}>{user.username}</label>
                         </div>

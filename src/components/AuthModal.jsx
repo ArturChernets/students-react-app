@@ -40,15 +40,16 @@ function AuthModal({ onClose, onAuthSuccess }) {
                         setFormData({ username: "", password: "" });
                     }, 1500);
                 } else {
-                    const { token, username } = response.data;
+                    const { token, username, id: userId } = response.data;
                     if (!token) {
                         throw new Error("No token received from server.");
                     }
                     localStorage.setItem("token", token);
                     localStorage.setItem("username", username || formData.username);
+                    localStorage.setItem("userId", userId); // Зберігаємо userId
                     setNotification("Login successful!");
                     setTimeout(() => {
-                        onAuthSuccess({ username: username || formData.username });
+                        onAuthSuccess({ username: username || formData.username, userId });
                         onClose();
                     }, 1500);
                 }
