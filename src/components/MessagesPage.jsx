@@ -1,26 +1,63 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import styles from "../styles/MessagesPage.module.css";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import styles from '../styles/MessagesPage.module.css';
+import AddChatModal from '../components/AddChatModal';
 
-const avatarSrc = "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-image-user-vector-179390926.jpg";
+const avatarSrc = 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-image-user-vector-179390926.jpg';
 
 function MessagesPage() {
+    const [rooms, setRooms] = useState([]);
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    useEffect(() => {
+        fetchRooms();
+    }, []);
+
+    const fetchRooms = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get('http://localhost:3000/api/chatrooms/my', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            const data = res.data;
+            if (Array.isArray(data)) {
+                setRooms(data); // Якщо це масив, оновлюємо стан
+            } else {
+                console.warn('Expected array from /api/chatrooms/my but got:', data);
+                setRooms([]); // Якщо дані не є масивом, обнуляємо кімнати
+            }
+        } catch (error) {
+            console.error('Failed to fetch chat rooms:', error);
+            setRooms([]); // На випадок помилки
+        }
+    };
+
+    const handleRoomCreate = (newRoom) => {
+        setRooms(prev => [...prev, newRoom]);
+    };
+
     return (
         <main className={styles.messagesPage}>
             <h1 className={styles.title}>Messages</h1>
-
             <div className={styles.messagesContainer}>
                 <aside className={styles.chatRooms}>
                     <div className={styles.chatRoomsHeader}>
                         <h2>Chat room</h2>
-                        <a href="#" className={styles.newChat}>+ New chat room</a>
+                        <button className={styles.addButton} onClick={() => setModalOpen(true)}>
+                            + New chat room
+                        </button>
                     </div>
                     <ul className={styles.chatList}>
-                        {["Admin", "Ann Smith", "John Bond", "Ivon Stan"].map((name, index) => (
-                            <li key={index} className={`${styles.chatItem} ${index === 0 ? styles.active : ""}`}>
-                                <img src={avatarSrc} alt={`${name} avatar`} className={styles.chatAvatar} />
-                                <span>{name}</span>
+                        {rooms.map((room, index) => (
+                            <li
+                                key={room._id}
+                                className={`${styles.chatItem} ${selectedRoom === room._id ? styles.active : ''}`}
+                                onClick={() => setSelectedRoom(room._id)}
+                            >
+                                <img src={avatarSrc} alt={`${room.name} avatar`} className={styles.chatAvatar} />
+                                <span>{room.name}</span>
                             </li>
                         ))}
                     </ul>
@@ -71,6 +108,11 @@ function MessagesPage() {
                     </div>
                 </section>
             </div>
+            <AddChatModal
+                isOpen={isModalOpen}
+                onClose={() => setModalOpen(false)}
+                onCreate={handleRoomCreate}
+            />
         </main>
     );
 }
