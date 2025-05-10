@@ -53,7 +53,7 @@ function Header({ onModalOpen }) {
         <header className={styles.header}>
             <div className={styles.leftSection}>
                 <Link to="/students" className={styles.csmText}>
-                    CSM
+                    CMS
                 </Link>
             </div>
             <div className={styles.rightSection}>

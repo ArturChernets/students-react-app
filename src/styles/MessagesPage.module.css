@@ -1,7 +1,7 @@
 .messagesPage {
     padding: 20px;
     margin: 25px 0 0 clamp(250px, 15vw, 350px);
-    width: calc(100% - clamp(0px, 15vw, 100px));
+    width: calc(100% - clamp(0px, 15vw, 15px));
     max-width: 1440px;
 }
 

@@ -3,17 +3,36 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import styles from '../styles/GroupChat.module.css';
 
+
 const socket = io('http://localhost:3000', {
     auth: {
         token: localStorage.getItem('token')
     }
 });
 
-export default function GroupChat({ roomId }) {
+export default function GroupChat({ roomId, chatName }) {
     const [messages, setMessages] = useState([]);
+    const [users, setUsers] = useState([]);
     const [input, setInput] = useState('');
     const bottomRef = useRef();
     const currentUserId = localStorage.getItem('userId');
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const fetchUsers = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get('http://localhost:8080/api/users/getAll', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setUsers(Array.isArray(res.data) ? res.data : []);
+        } catch (err) {
+            console.error('Failed to fetch users:', err);
+            setUsers([]);
+        }
+    };
 
     useEffect(() => {
         if (roomId) {
@@ -64,21 +83,30 @@ export default function GroupChat({ roomId }) {
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.header}>Room: {roomId}</div>
+            <div className={styles.header}>Chat: {chatName}</div>
             <div className={styles.messages}>
-                {messages.map(msg => (
-                    <div
-                        key={msg._id}
-                        className={
-                            msg.senderId === currentUserId
-                                ? styles.sent
-                                : styles.received
-                        }
-                    >
-                        <div className={styles.balloon}>{msg.content}</div>
-                    </div>
-                ))}
-                <div ref={bottomRef} />
+                {messages.map(msg => {
+                    const sender = users.find(user => user.id.toString() === msg.senderId);
+                    return (
+                        <div
+                            key={msg._id}
+                            className={
+                                msg.senderId === currentUserId
+                                    ? styles.sent
+                                    : styles.received
+                            }
+                        >
+                            <div className={styles.balloon}>
+                                <div className={styles.senderName}>
+                                    {sender ? sender.username : 'Unknown'}
+                                </div>
+                                <div>{msg.content}</div>
+                            </div>
+                        </div>
+                    );
+                })}
+
+                <div ref={bottomRef}/>
             </div>
             <div className={styles.inputArea}>
                 <textarea

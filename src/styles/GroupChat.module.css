@@ -41,6 +41,12 @@
     background: #e0d4f7;
 }
 
+.senderName {
+    font-weight: bold;
+    color: #0622d9;
+    margin-bottom: 4px;
+}
+
 .inputArea {
     display: flex;
     padding: 12px;

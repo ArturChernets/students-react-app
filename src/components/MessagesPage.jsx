@@ -1,4 +1,3 @@
-// src/components/MessagesPage.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddChatModal from '../components/AddChatModal';
@@ -8,6 +7,7 @@ import styles from '../styles/MessagesPage.module.css';
 export default function MessagesPage() {
     const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState(null);
+    const [selectedRoomName, setSelectedRoomName] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
@@ -30,6 +30,12 @@ export default function MessagesPage() {
     const handleRoomCreate = room => {
         setRooms(prev => [...prev, room]);
         setSelectedRoom(room._id);
+        setSelectedRoomName(room.name);
+    };
+
+    const handleRoomSelect = (roomId, roomName) => {
+        setSelectedRoom(roomId);
+        setSelectedRoomName(roomName);
     };
 
     return (
@@ -38,7 +44,7 @@ export default function MessagesPage() {
             <div className={styles.messagesContainer}>
                 <aside className={styles.chatRooms}>
                     <div className={styles.chatRoomsHeader}>
-                        <h2>Chat Rooms</h2>
+                        <h2>Chats</h2>
                         <button
                             className={styles.addButton}
                             onClick={() => setModalOpen(true)}
@@ -49,7 +55,7 @@ export default function MessagesPage() {
                             <li
                                 key={room._id}
                                 className={`${styles.chatItem} ${selectedRoom === room._id ? styles.active : ''}`}
-                                onClick={() => setSelectedRoom(room._id)}
+                                onClick={() => handleRoomSelect(room._id, room.name)}
                             >
                                 <span>{room.name}</span>
                             </li>
@@ -59,7 +65,7 @@ export default function MessagesPage() {
 
                 <section className={styles.chatArea}>
                     {selectedRoom
-                        ? <GroupChat roomId={selectedRoom} />
+                        ? <GroupChat roomId={selectedRoom} chatName={selectedRoomName}/>
                         : <div className={styles.noRoom}>Please select a chat room</div>
                     }
                 </section>

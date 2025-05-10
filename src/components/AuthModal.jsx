@@ -51,6 +51,7 @@ function AuthModal({ onClose, onAuthSuccess }) {
                     setTimeout(() => {
                         onAuthSuccess({ username: username || formData.username, userId });
                         onClose();
+                        window.location.reload();
                     }, 1500);
                 }
             }
