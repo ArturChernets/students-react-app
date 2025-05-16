@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import AddChatModal from '../components/AddChatModal';
-import GroupChat from '../components/GroupChat';
-import styles from '../styles/MessagesPage.module.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import AddChatModal from "../components/AddChatModal";
+import GroupChat from "../components/GroupChat";
+import styles from "../styles/MessagesPage.module.css";
 
-export default function MessagesPage() {
+export default function MessagesPage({ currentRoom, onNavigateToRoom }) {
     const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState(null);
-    const [selectedRoomName, setSelectedRoomName] = useState('');
+    const [selectedRoomName, setSelectedRoomName] = useState("");
     const [isModalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
@@ -16,26 +16,25 @@ export default function MessagesPage() {
 
     const fetchRooms = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:3000/api/chatrooms/my', {
-                headers: { Authorization: `Bearer ${token}` }
+            const token = localStorage.getItem("token");
+            const res = await axios.get("http://localhost:3000/api/chatrooms/my", {
+                headers: { Authorization: `Bearer ${token}` },
             });
-            setRooms(Array.isArray(res.data) ? res.data : []);
-        } catch (err) {
-            console.error('Failed to fetch chat rooms:', err);
+            setRooms(res.data || []);
+        } catch {
             setRooms([]);
         }
     };
 
-    const handleRoomCreate = room => {
-        setRooms(prev => [...prev, room]);
-        setSelectedRoom(room._id);
-        setSelectedRoomName(room.name);
+    const handleRoomCreate = (room) => {
+        setRooms((prev) => [...prev, room]);
+        selectRoom(room._id, room.name);
     };
 
-    const handleRoomSelect = (roomId, roomName) => {
-        setSelectedRoom(roomId);
-        setSelectedRoomName(roomName);
+    const selectRoom = (id, name) => {
+        setSelectedRoom(id);
+        setSelectedRoomName(name);
+        onNavigateToRoom(id);
     };
 
     return (
@@ -45,32 +44,32 @@ export default function MessagesPage() {
                 <aside className={styles.chatRooms}>
                     <div className={styles.chatRoomsHeader}>
                         <h2>Chats</h2>
-                        <button
-                            className={styles.addButton}
-                            onClick={() => setModalOpen(true)}
-                        >+ New Room</button>
+                        <button className={styles.addButton} onClick={() => setModalOpen(true)}>
+                            + New Room
+                        </button>
                     </div>
                     <ul className={styles.chatList}>
-                        {rooms.map(room => (
+                        {rooms.map((room) => (
                             <li
                                 key={room._id}
-                                className={`${styles.chatItem} ${selectedRoom === room._id ? styles.active : ''}`}
-                                onClick={() => handleRoomSelect(room._id, room.name)}
+                                className={`${styles.chatItem} ${
+                                    selectedRoom === room._id ? styles.active : ""
+                                }`}
+                                onClick={() => selectRoom(room._id, room.name)}
                             >
-                                <span>{room.name}</span>
+                                {room.name}
                             </li>
                         ))}
                     </ul>
                 </aside>
-
                 <section className={styles.chatArea}>
-                    {selectedRoom
-                        ? <GroupChat roomId={selectedRoom} chatName={selectedRoomName}/>
-                        : <div className={styles.noRoom}>Please select a chat room</div>
-                    }
+                    {selectedRoom ? (
+                        <GroupChat roomId={selectedRoom} chatName={selectedRoomName} />
+                    ) : (
+                        <div className={styles.noRoom}>Please select a chat room</div>
+                    )}
                 </section>
             </div>
-
             <AddChatModal
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}

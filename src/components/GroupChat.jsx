@@ -48,6 +48,7 @@ export default function GroupChat({ roomId, chatName }) {
 
         return () => {
             socket.emit('leaveRoom', { roomId });
+            socket.emit('rejoinAllRooms');
             socket.off('newMessage');
         };
     }, [roomId]);

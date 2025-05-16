@@ -1,36 +1,40 @@
-import React, { useState, useEffect } from "react";
+// src/components/BellNotifications.jsx
+
+import React, { useEffect, useState } from "react";
 import { MdNotificationsNone, MdNotificationsActive } from "react-icons/md";
 import styles from "../styles/BellNotifications.module.css";
+import { useNavigate } from "react-router-dom";
 
-function BellNotifications() {
+export default function BellNotifications({ currentRoom, onNavigateToRoom }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [hasNewNotification, setHasNewNotification] = useState(false);
+    const [notifications, setNotifications] = useState([]); // { id, roomId, username, message }
     const [animate, setAnimate] = useState(false);
-    const [notifications, setNotifications] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const timer = setTimeout(() => {
+        const handler = (msg) => {
+            if (msg.roomId === currentRoom) return;
+            setNotifications((prev) => [
+                { id: msg._id, roomId: msg.roomId, username: msg.username, message: msg.content },
+                ...prev,
+            ]);
             setAnimate(true);
-            setTimeout(() => {
-                setHasNewNotification(true);
-                setAnimate(false);
-                setNotifications([
-                    { id: 1, avatar: "https://randomuser.me/api/portraits/men/1.jpg", username: "JohnDoe", message: "Testing of the new feature is complete." },
-                    { id: 2, avatar: "https://randomuser.me/api/portraits/women/1.jpg", username: "JaneSmith", message: "Found a bug in the authentication module." },
-                    { id: 3, avatar: "https://randomuser.me/api/portraits/men/2.jpg", username: "SamWilson", message: "Can't make a pull request due to a conflict with the main branch" },
-                ]);
-            }, 1000);
-        }, 5000);
+            setTimeout(() => setAnimate(false), 800);
+        };
 
-        return () => clearTimeout(timer);
-    }, []);
+        window.socket?.on("newMessage", handler);
+        return () => {
+            window.socket?.off("newMessage", handler);
+        };
+    }, [currentRoom]);
 
-    const handleMouseEnter = () => {
-        setIsOpen(true);
-    };
+    const handleMouseEnter = () => setIsOpen(true);
+    const handleMouseLeave = () => setIsOpen(false);
 
-    const handleMouseLeave = () => {
-        setIsOpen(false);
+    const handleClickNotif = (roomId) => {
+        setNotifications((prev) => prev.filter((n) => n.roomId !== roomId));
+        onNavigateToRoom(roomId);
+        navigate("/messages");
     };
 
     return (
@@ -40,27 +44,26 @@ function BellNotifications() {
             onMouseLeave={handleMouseLeave}
         >
             <div className={`${styles.bellIcon} ${animate ? styles.shake : ""}`}>
-                {hasNewNotification ? (
-                    <MdNotificationsActive/>
-                ) : (
-                    <MdNotificationsNone/>
-                )}
-                {hasNewNotification && <div className={styles.unreadDot}></div>}
+                {notifications.length > 0 ? <MdNotificationsActive /> : <MdNotificationsNone />}
+                {notifications.length > 0 && <div className={styles.unreadDot}></div>}
             </div>
 
             {isOpen && (
                 <div className={styles.notificationsList}>
                     {notifications.length > 0 ? (
-                        notifications.map((notif) => (
-                            <div key={notif.id} className={styles.notification}>
-                                <img
-                                    src={notif.avatar}
-                                    alt={notif.username}
-                                    className={styles.avatar}
-                                />
+                        notifications.map((n) => (
+                            <div
+                                key={n.id}
+                                className={styles.notification}
+                                onClick={() => handleClickNotif(n.roomId)}
+                            >
                                 <div className={styles.notificationText}>
-                                    <span className={styles.username}>{notif.username}</span>
-                                    <span className={styles.message}>{notif.message.substring(0, 30)}...</span>
+                                    <span className={styles.username}>{n.username}:</span>{" "}
+                                    <span className={styles.message}>
+                                        {n.message.length > 30
+                                            ? n.message.slice(0, 27) + "..."
+                                            : n.message}
+                                    </span>
                                 </div>
                             </div>
                         ))
@@ -72,5 +75,3 @@ function BellNotifications() {
         </div>
     );
 }
-
-export default BellNotifications;

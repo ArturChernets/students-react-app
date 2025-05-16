@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../styles/Header.module.css";
 import BellNotifications from "./BellNotifications";
 import UserMenu from "./UserMenu";
 import AuthModal from "./AuthModal";
+import { MdChat } from "react-icons/md";
 
-function Header({ onModalOpen }) {
+export default function Header({ onModalOpen, currentRoom, onNavigateToRoom }) {
     const [user, setUser] = useState(null);
     const [showAuthModal, setShowAuthModal] = useState(false);
     const navigate = useNavigate();
@@ -30,20 +31,13 @@ function Header({ onModalOpen }) {
     const handleLogout = async () => {
         try {
             const token = localStorage.getItem("token");
-            await axios.patch(
-                "http://localhost:8080/api/auth/logout",
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            await axios.patch("http://localhost:8080/api/auth/logout", {}, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
         } catch (error) {
             console.error("Logout error:", error);
         } finally {
-            localStorage.removeItem("token");
-            localStorage.removeItem("username");
+            localStorage.clear();
             setUser(null);
             navigate("/");
         }
@@ -52,16 +46,18 @@ function Header({ onModalOpen }) {
     return (
         <header className={styles.header}>
             <div className={styles.leftSection}>
-                <Link to="/students" className={styles.csmText}>
-                    CMS
-                </Link>
+                <Link to="/students" className={styles.csmText}>CMS</Link>
             </div>
             <div className={styles.rightSection}>
                 {user ? (
                     <>
                         <Link to="/messages">
-                            <BellNotifications />
+                            <MdChat className={styles.chatIcon} />
                         </Link>
+                        <BellNotifications
+                            currentRoom={currentRoom}
+                            onNavigateToRoom={onNavigateToRoom}
+                        />
                         <img
                             src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-image-user-vector-179390926.jpg"
                             alt="Avatar"
@@ -87,5 +83,3 @@ function Header({ onModalOpen }) {
         </header>
     );
 }
-
-export default Header;

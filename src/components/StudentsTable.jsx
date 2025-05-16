@@ -41,7 +41,6 @@ function StudentsTable() {
             const res = await axios.get(`${API_URL}/get?page=${currentPage}&size=${studentsPerPage}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            console.log("Fetch response:", res.data);
             setStudents(res.data.content || []);
             setTotalPages(res.data.totalPages || 1);
         } catch (error) {
